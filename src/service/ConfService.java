@@ -26,7 +26,7 @@ import cn.hutool.setting.dialect.Props;
 import cn.hutool.system.SystemUtil;
 import gui.panel.BackupPanel;
 import gui.panel.ConfigPanel;
-import test.HttpRequester;
+import util.HttpRequester;
 import util.Progress;
 
 public class ConfService {

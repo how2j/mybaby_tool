@@ -10,7 +10,7 @@ public class MainFrame extends JFrame{
      
     private MainFrame(){
         this.setSize(600,550);
-        this.setTitle("一本糊涂账");
+        this.setTitle("小仙人板板");
         this.setContentPane(MainPanel.instance);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
