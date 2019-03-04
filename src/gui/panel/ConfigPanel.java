@@ -2,12 +2,14 @@ package gui.panel;
  
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
- 
+import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
- 
+
+import cn.hutool.system.SystemUtil;
 import gui.listener.ConfigListener;
 import service.ConfService;
 import util.ColorUtil;
@@ -38,19 +40,19 @@ public class ConfigPanel extends WorkingPanel {
     JLabel lContext = new JLabel("应用名称");
     public JTextField tfContext = new JTextField("mybaby");
 
-    JLabel lMysql = new JLabel("Mysql安装目录");
-    public JTextField tfMysqlPath = new JTextField("");
+    JLabel lBackupFolder = new JLabel("万一恢复功能失败，还可以在这个目录找到你心爱宝宝的所有资料");
+    public JTextField tfBackupFolder = new JTextField("");
  
     JButton bSubmit = new JButton("更新");
  
     public ConfigPanel() {
-        GUIUtil.setColor(ColorUtil.grayColor, lPassword, lMysql);
+        GUIUtil.setColor(ColorUtil.grayColor,lIp, lport,lContext,lPassword, lBackupFolder);
         GUIUtil.setColor(ColorUtil.blueColor, bSubmit);
  
         JPanel pInput = new JPanel();
         JPanel pSubmit = new JPanel();
         int gap = 10;
-        pInput.setLayout(new GridLayout(9, 1, gap, gap));
+        pInput.setLayout(new GridLayout(11, 1, gap, gap));
  
         pInput.add(lPassword);
         pInput.add(tfPassword);
@@ -60,6 +62,8 @@ public class ConfigPanel extends WorkingPanel {
         pInput.add(tfPort);
         pInput.add(lContext);
         pInput.add(tfContext);
+        pInput.add(lBackupFolder);
+        pInput.add(tfBackupFolder);
         
  
         pSubmit.add(bSubmit);
@@ -88,10 +92,15 @@ public class ConfigPanel extends WorkingPanel {
     	String context = cs.getContext();
     	String password = cs.getPassword();
     	
+    	
     	tfIp.setText(ip);
     	tfPort.setText(port);
     	tfContext.setText(context);
     	tfPassword.setText(password);
+    	tfBackupFolder.setText(new File(SystemUtil.getUserInfo().getCurrentDir(),"backup").getAbsolutePath());
+    	tfBackupFolder.setEditable(false);
+    	
+    	
         tfPassword.grabFocus();
     }
  

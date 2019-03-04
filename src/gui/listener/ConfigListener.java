@@ -15,11 +15,18 @@ import util.GUIUtil;
  
 public class ConfigListener implements ActionListener{
  
+	
+	
     @Override
     public void actionPerformed(ActionEvent e) {
         ConfigPanel p = ConfigPanel.instance;
         if(!GUIUtil.checkEmpty(p.tfIp, "IP 地址"))
             return;
+        
+        p.tfIp.setText(p.tfIp.getText().toLowerCase().replaceAll("http://", ""));
+        
+        System.out.println(p.tfIp.getText());
+        
         if(!GUIUtil.checkEmpty(p.tfPort, "端口号"))
         	return;
 //        if(!GUIUtil.checkEmpty(p.tfContext, "应用名称"))

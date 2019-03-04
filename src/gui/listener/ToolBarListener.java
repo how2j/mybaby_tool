@@ -9,6 +9,7 @@ import gui.panel.BackupPanel;
 import gui.panel.ConfigPanel;
 import gui.panel.MainPanel;
 import gui.panel.RecoverPanel;
+import gui.panel.TimerBackupPanel;
  
 public class ToolBarListener implements ActionListener {
     @Override
@@ -21,6 +22,8 @@ public class ToolBarListener implements ActionListener {
             p.workingPanel.show(BackupPanel.instance);
         if (b == p.bRecover)
             p.workingPanel.show(RecoverPanel.instance);
+        if (b == p.bTimerBackup)
+        	p.workingPanel.show(TimerBackupPanel.instance);
  
     }
 }

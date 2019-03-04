@@ -9,8 +9,8 @@ public class MainFrame extends JFrame{
     public static MainFrame instance = new MainFrame();
      
     private MainFrame(){
-        this.setSize(600,550);
-        this.setTitle("小仙人板板");
+        this.setSize(650,650);
+        this.setTitle("宝宝相册 - powered by how2j.cn");
         this.setContentPane(MainPanel.instance);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

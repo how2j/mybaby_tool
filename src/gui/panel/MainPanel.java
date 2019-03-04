@@ -20,6 +20,7 @@ public class MainPanel extends JPanel {
     public JButton bConfig = new JButton();
     public JButton bBackup = new JButton();
     public JButton bRecover = new JButton();
+    public JButton bTimerBackup = new JButton();
  
     public CenterPanel workingPanel;
  
@@ -27,10 +28,12 @@ public class MainPanel extends JPanel {
         GUIUtil.setImageIcon(bConfig, "config.png", "设置");
         GUIUtil.setImageIcon(bBackup, "backup.png", "备份");
         GUIUtil.setImageIcon(bRecover, "restore.png", "恢复");
+        GUIUtil.setImageIcon(bTimerBackup, "restore.png", "定时备份");
 
         tb.add(bConfig);
         tb.add(bBackup);
         tb.add(bRecover);
+//        tb.add(bTimerBackup);
         tb.setFloatable(false);
  
         workingPanel = new CenterPanel(0.8);
@@ -48,6 +51,7 @@ public class MainPanel extends JPanel {
         bConfig.addActionListener(listener);
         bBackup.addActionListener(listener);
         bRecover.addActionListener(listener);
+        bTimerBackup.addActionListener(listener);
          
     }
     

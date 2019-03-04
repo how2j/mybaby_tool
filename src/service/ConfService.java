@@ -27,20 +27,27 @@ import cn.hutool.system.SystemUtil;
 import gui.panel.BackupPanel;
 import gui.panel.ConfigPanel;
 import util.HttpRequester;
+import util.LogPrintStream;
 import util.Progress;
 
 public class ConfService {
 	File configFile = null;
 	File backupAllInfoFile = null;
-	public File backupPictureFolder = null;
-	public File backupVideoFolder = null;
+	public File backupDir = null;
 	File backupConfigFile = null;
+	
 
 //	Props props = null;
 	
 	
 	 
 	public static void main(String[] args) throws Exception {
+		LogPrintStream.init();
+		new ConfService().backupAllInfo();
+		new ConfService().backupConfig();
+		new ConfService().backupPictures(null);
+		new ConfService().backupVideos(null);
+		
 //		new ConfService().upload();
 //		String url =  "http://47.104.28.243/uploaded/small_video/83_small.mp4";
 //		File f =new File("d:/83_small.mp4");
@@ -90,16 +97,13 @@ public class ConfService {
 		configFile = new File(folder,"config.properties");
 		backupAllInfoFile = new File(folder,"backup/allinfo.json");
 		backupConfigFile = new File(folder,"backup/config.json");
-		backupPictureFolder = new File(folder,"backup/picture");
-		backupVideoFolder = new File(folder,"backup/video");
+		
+		backupDir  = new File(SystemUtil.get(SystemUtil.USER_DIR),"backup");
+		
 		if(!configFile.exists())
 			FileUtil.touch(configFile);
 		if(!backupAllInfoFile.exists())
 			FileUtil.touch(backupAllInfoFile);
-		if(!backupPictureFolder.exists())
-			backupPictureFolder.mkdirs();
-		if(!backupVideoFolder.exists())
-			backupVideoFolder.mkdirs();
 		if(!backupConfigFile.exists())
 			FileUtil.touch(backupConfigFile);
 		
@@ -247,6 +251,28 @@ public class ConfService {
 		try {
 			String json = getServerAllInfo();
 			FileUtil.writeString(json, backupAllInfoFile, "utf-8");
+			
+			JSONArray array = JSONUtil.parseArray(json);
+			//calc total
+			for (int i = 0; i < array.size(); i++) {
+	 			Object o = array.get(i);
+	 			JSONObject record = (JSONObject) o;
+	 			long createDate = record.getLong("createDate");
+	 			String date = DateUtil.date(createDate).toDateStr();
+	 			File recordFile = new File(backupDir+"/" + date, "record.txt");
+	 			
+	 			String title = record.getStr("title");
+	 			String text = record.getStr("text");
+	 			
+	 			StringBuffer sb = new StringBuffer();
+	 			sb.append(title);
+	 			sb.append("\r\n");
+	 			sb.append(text);
+	 			
+	 			recordFile.getParentFile().mkdirs();
+	 			FileUtil.writeString(sb.toString(), recordFile, "utf-8");
+			}
+			
 			return true;
 		}
 		catch(Exception e) {
@@ -321,12 +347,14 @@ public class ConfService {
  			total+=pictures.size();
 		}
 		
-		FileUtil.del(backupPictureFolder);
+		
 
 		//download each
 		for (int i = 0; i < array.size(); i++) {
  			Object o = array.get(i);
  			JSONObject record = (JSONObject) o;
+ 			long createDate = record.getLong("createDate");
+ 			String date = DateUtil.date(createDate).toDateStr();
  			JSONArray pictures= (JSONArray) record.get("pictures");
  			for (int j = 0; j < pictures.size(); j++) {
  				Object p = pictures.get(j);
@@ -339,12 +367,15 @@ public class ConfService {
  	 			String port = getPort();
  	 			String context = getContext();
  	 			String password = getPassword();
+ 	 			
+ 	 			
  	 		
  	 			String url = StrUtil.format("http://{}:{}/{}/uploaded/picture/{}.jpg",ip,port,context,picture.get("id")); ;
  	 			
  	 			Map<String,Object> param = new HashMap();
  	 			param.put("password", password);
- 	 			File pictureFile = new File(backupPictureFolder,picture.get("id")+".jpg");
+ 	 			File pictureFile = new File(backupDir+"/"+date,picture.get("id")+".jpg");
+ 	 			System.out.println(pictureFile);
  	 			if(
  	 						pictureFile.exists()
  	 					&&	md5.equals(SecureUtil.md5(pictureFile))
@@ -358,7 +389,8 @@ public class ConfService {
  	 			}
  	 			count++;
  	 			int per = count*100/total;
- 	 			progress.progress(per);
+ 	 			if(null!=progress)
+ 	 				progress.progress(per);
 // 	 			ThreadUtil.sleep(1000);
 // 	 			break;
  	 			
@@ -366,7 +398,15 @@ public class ConfService {
 // 			break;
 		}
 		
+		clearPictures();
+		
 	}
+
+	private void clearPictures() {
+		// TODO Auto-generated method stub
+//		backupPictureFolder
+	}
+
 
 	private void download(Map<String, Object> param, String url, File file) throws Exception {
 		
@@ -404,18 +444,28 @@ public class ConfService {
 		for (int i = 0; i < array.size(); i++) {
  			Object o = array.get(i);
  			JSONObject record = (JSONObject) o;
+ 			
+ 			long createDate = record.getLong("createDate");
+ 			String date = DateUtil.date(createDate).toDateStr();
+ 			
  			JSONArray videos= (JSONArray) record.get("videos");
 // 			System.out.println(pictures.size());
  			total+=videos.size();
 		}
 		
-		FileUtil.del(backupVideoFolder);
+//		FileUtil.del(backupVideoFolder);
 
 		
 		//download each
 		for (int i = 0; i < array.size(); i++) {
  			Object o = array.get(i);
  			JSONObject record = (JSONObject) o;
+ 			
+ 			
+ 			
+ 			long createDate = record.getLong("createDate");
+ 			String date = DateUtil.date(createDate).toDateStr();
+
  			JSONArray videos= (JSONArray) record.get("videos");
  			for (int j = 0; j < videos.size(); j++) {
  				Object v = videos.get(j);
@@ -435,7 +485,7 @@ public class ConfService {
 
  	 			Map<String,Object> param = new HashMap();
  	 			param.put("password", password);
- 	 			File videoFile = new File(backupVideoFolder,video.get("id")+".mp4");
+ 	 			File videoFile = new File(backupDir+"/"+date,video.get("id")+".mp4");
 
  	 			if(
  	 					videoFile.exists()
@@ -452,8 +502,8 @@ public class ConfService {
 
  	 			count++;
  	 			int per = count*100/total;
-
- 	 			progress.progress(per);
+ 	 			if(null!=progress)
+ 	 				progress.progress(per);
 			}
 		}
 	}
@@ -501,8 +551,8 @@ public class ConfService {
 		
 		
 		for (Object o: posts) {
-			JSONObject post = (JSONObject) o;
-			String result = HttpUtil.post(postUrl,post.toString());
+			JSONObject record = (JSONObject) o;
+			String result = HttpUtil.post(postUrl,record.toString());
 
 
 			JSONObject object = JSONUtil.parseObj(result);
@@ -510,16 +560,20 @@ public class ConfService {
 			String pid = object.get("id").toString();
 
 			postCount++;
-			
+			if(null!=postProgress)
 			postProgress.progress(postCount*100/postTotal);
 
-			JSONArray pictures = post.getJSONArray("pictures");
+ 			long createDate = record.getLong("createDate");
+ 			String date = DateUtil.date(createDate).toDateStr();
+
+ 			
+			JSONArray pictures = record.getJSONArray("pictures");
 
 			for (int i = 0; i < pictures.size(); i++) {
 //				if(true)
 //					continue;
 				JSONObject picture = (JSONObject) pictures.get(i);
- 	 			File pictureFile = new File(backupPictureFolder,picture.get("id")+".jpg");
+ 	 			File pictureFile = new File(backupDir+"/"+date,picture.get("id")+".jpg");
  	 			if(0!=pictureFile.length()) {
 
  	 				String pictureUrl = home+"recover/picture";
@@ -537,14 +591,15 @@ public class ConfService {
  	 			}
  	 			
  	 			pictureCount++;
+ 	 			if(null!=pictureProgress)
  				pictureProgress.progress(pictureCount*100/pictureTotal);
 
 			}
-			JSONArray videos = post.getJSONArray("videos");
+			JSONArray videos = record.getJSONArray("videos");
 			for (int i = 0; i < videos.size(); i++) {
 				JSONObject video = (JSONObject) videos.get(i);
 
-				File videoFile = new File(backupVideoFolder,video.get("id")+".mp4");
+				File videoFile = new File(backupDir+"/"+date,video.get("id")+".mp4");
 				if(0!=videoFile.length()) {
 					
 					String videoUrl = home+"recover/video";
@@ -554,7 +609,7 @@ public class ConfService {
 					final Map<String, File> fileMap= new HashMap<>();
 					fileMap.put("image", videoFile);
 					paramMap.put("pid", pid);
-					paramMap.put("name",  "name:"+video.getStr("name"));
+					paramMap.put("name",  video.getStr("name"));
 					paramMap.put("index",  video.getStr("index"));
 					paramMap.put("status", video.getStr("status"));
 					paramMap.put("createDate", String.valueOf(video.getLong("createDate")));
@@ -604,7 +659,7 @@ public class ConfService {
 //
 //				}
 				videoCount++;
-				
+				if(null!=videoProgress)
  				videoProgress.progress(videoCount*100/videoTotal);
 			}
 		}

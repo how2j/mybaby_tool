@@ -42,8 +42,6 @@ public class RecoverListener implements ActionListener {
 								options[2]);
 						// int a= JOptionPane.showConfirmDialog(p,
 						// "服务器上是有数据的，是要覆盖还是追加？");
-						System.out.println(n);
-						
 						//取消
 						if(2==n) {
 							return;
@@ -60,8 +58,6 @@ public class RecoverListener implements ActionListener {
 //							System.out.println(password);
 							
 							boolean valid = configService.check(password);
-							System.out.println("password:"+password);
-							System.out.println("valid:"+valid);
 							if(!valid) {
 								return;
 							}
