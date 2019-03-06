@@ -25,7 +25,7 @@ public class ConfigListener implements ActionListener{
         
         p.tfIp.setText(p.tfIp.getText().toLowerCase().replaceAll("http://", ""));
         
-        System.out.println(p.tfIp.getText());
+
         
         if(!GUIUtil.checkEmpty(p.tfPort, "端口号"))
         	return;

@@ -19,7 +19,7 @@ public class BackupTimer implements Runnable{
 	@Override
 	public void run() {
 		while(true) {
-			ThreadUtil.sleep(3000);
+			ThreadUtil.sleep(1000*60*60);
 			working();
 		}
 	}
