@@ -48,47 +48,7 @@ public class ConfService {
 		new ConfService().backupPictures(null);
 		new ConfService().backupVideos(null);
 		
-//		new ConfService().upload();
-//		String url =  "http://47.104.28.243/uploaded/small_video/83_small.mp4";
-//		File f =new File("d:/83_small.mp4");
-//		String url =  "http://47.104.28.243/uploaded/video/83.mp4";
-//		String url =  "http://127.0.0.1:8080/mybaby/uploaded/video/22.mp4";
-//		String url =  "http://127.0.0.1:8080/mybaby/uploaded/video/48.mp4";
-//		File f =new File("d:/temp/baby/test.mp4");
-//
-//		f.delete();
-//		
-//		Map param = new HashMap<>();
-//		param.put("password", "admin!");
-//		new ConfService().download(param, url, f);
-//		System.out.println(f.length());
-		
-//		HttpUtil.downloadFile(url, f)
-		
-//		LogPrintStream.init();
-//		ConfService configService = new ConfService();
-//		configService.reset();
-//		 System.out.println(configService.getServerAllInfo());
-//		
-//		Progress postProgress = new Progress() {
-//			@Override
-//			public void progress(int percentage) {
-//				System.out.println("post:"+percentage+"%");
-//			}
-//		};
-//		Progress pictureProgress = new Progress() {
-//			@Override
-//			public void progress(int percentage) {
-//				System.out.println("picture:"+percentage+"%");
-//			}
-//		};
-//		Progress videoProgress = new Progress() {
-//			@Override
-//			public void progress(int percentage) {
-//				System.out.println("video:"+percentage+"%");
-//			}
-//		};
-//		configService.recover(postProgress,pictureProgress,videoProgress);
+
 	}
 
 	
