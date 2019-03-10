@@ -25,7 +25,7 @@ public class BackupService {
         if(check) {
         	SwingWorker<Object, Object> worker = new SwingWorker<Object, Object>() {
         		protected Object doInBackground() {
-        			BackupService.backupping = true;
+        			BackupService.backuppingOrRecovering = true;
         			try {
 						int localRecordSize = confService.getLocalRecordSize();
 						int serverRecordSize = confService.getServerRecordSize();
@@ -100,7 +100,7 @@ public class BackupService {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-        			BackupService.backupping = false;
+        			BackupService.backuppingOrRecovering = false;
     				return null;
         		}
         	};
@@ -110,5 +110,5 @@ public class BackupService {
         }
 	}
 
-	public static boolean backupping = false;
+	public static boolean backuppingOrRecovering = false;
 }

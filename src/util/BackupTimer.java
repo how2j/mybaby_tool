@@ -10,9 +10,6 @@ import service.BackupService;
 public class BackupTimer implements Runnable{
 
 	public static void start() {
-
-
-		
 		new Thread(new BackupTimer()).start();
 	}
 
@@ -26,7 +23,7 @@ public class BackupTimer implements Runnable{
 
 	public void working() {
 		TimerBackupPanel p = TimerBackupPanel.instance;
-		if(BackupService.backupping) {
+		if(BackupService.backuppingOrRecovering) {
 //    		JOptionPane.showMessageDialog(p, "正在备份");
     		return;
     	};

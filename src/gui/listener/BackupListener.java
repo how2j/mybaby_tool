@@ -12,7 +12,7 @@ public class BackupListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         BackupPanel p  =BackupPanel.instance;
-		if(BackupService.backupping) {
+		if(BackupService.backuppingOrRecovering) {
     		JOptionPane.showMessageDialog(p, "正在备份");
     		return;
     	};
